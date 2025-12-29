@@ -52,3 +52,32 @@ This file tracks changes made to the project, why they were made, and where they
 - Open endpoints: `/auth/register`, `/auth/login`, `/actuator/health`.
 - All other endpoints require `Authorization: Bearer <token>`.
 - JWT secret is a dev placeholder; replace before production.
+
+## 2025-12-29 - Step 3: Workspaces + membership (core)
+
+### Summary
+- Added workspace and membership tables plus basic CRUD endpoints.
+- Creator is automatically added as OWNER.
+
+### Added
+- Migration: `backend/src/main/resources/db/migration/V3__workspaces.sql`.
+- Workspace model + repos:
+  - `backend/src/main/java/com/dusan/taskflow/workspace/Workspace.java`
+  - `backend/src/main/java/com/dusan/taskflow/workspace/WorkspaceMember.java`
+  - `backend/src/main/java/com/dusan/taskflow/workspace/WorkspaceMemberId.java`
+  - `backend/src/main/java/com/dusan/taskflow/workspace/WorkspaceRole.java`
+  - `backend/src/main/java/com/dusan/taskflow/workspace/WorkspaceRepository.java`
+  - `backend/src/main/java/com/dusan/taskflow/workspace/WorkspaceMemberRepository.java`
+- Workspace API:
+  - `backend/src/main/java/com/dusan/taskflow/workspace/WorkspaceController.java`
+  - `backend/src/main/java/com/dusan/taskflow/workspace/WorkspaceService.java`
+  - `backend/src/main/java/com/dusan/taskflow/workspace/dto/WorkspaceCreateRequest.java`
+  - `backend/src/main/java/com/dusan/taskflow/workspace/dto/WorkspaceResponse.java`
+- Current user helper:
+  - `backend/src/main/java/com/dusan/taskflow/auth/CurrentUserService.java`
+
+### Notes
+- Endpoints:
+  - `POST /workspaces` creates a workspace and sets creator to OWNER.
+  - `GET /workspaces` lists current user's workspaces.
+  - `GET /workspaces/{id}` returns a workspace only if the user is a member.
