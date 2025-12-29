@@ -1,0 +1,1 @@
+-- baseline migration (tables added in next steps)
