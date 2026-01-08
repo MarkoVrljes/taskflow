@@ -81,3 +81,41 @@ This file tracks changes made to the project, why they were made, and where they
   - `POST /workspaces` creates a workspace and sets creator to OWNER.
   - `GET /workspaces` lists current user's workspaces.
   - `GET /workspaces/{id}` returns a workspace only if the user is a member.
+
+## 2025-12-29 - Step 4: Projects + tasks (core)
+
+### Summary
+- Added projects and tasks tables and CRUD endpoints.
+- Added task filtering, search, pagination, and sorting.
+
+### Added
+- Migration: `backend/src/main/resources/db/migration/V4__projects_tasks.sql`.
+- Project model + API:
+  - `backend/src/main/java/com/dusan/taskflow/project/Project.java`
+  - `backend/src/main/java/com/dusan/taskflow/project/ProjectRepository.java`
+  - `backend/src/main/java/com/dusan/taskflow/project/ProjectService.java`
+  - `backend/src/main/java/com/dusan/taskflow/project/ProjectController.java`
+  - `backend/src/main/java/com/dusan/taskflow/project/dto/ProjectCreateRequest.java`
+  - `backend/src/main/java/com/dusan/taskflow/project/dto/ProjectResponse.java`
+- Task model + API:
+  - `backend/src/main/java/com/dusan/taskflow/task/Task.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/TaskRepository.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/TaskSpecifications.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/TaskService.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/TaskController.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/TaskStatus.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/TaskPriority.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/dto/TaskCreateRequest.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/dto/TaskUpdateRequest.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/dto/TaskResponse.java`
+
+### Notes
+- Project endpoints:
+  - `POST /workspaces/{workspaceId}/projects`
+  - `GET /workspaces/{workspaceId}/projects`
+- Task endpoints:
+  - `POST /projects/{projectId}/tasks`
+  - `GET /workspaces/{workspaceId}/tasks` (supports filters + pagination)
+  - `GET /tasks/{taskId}`
+  - `PATCH /tasks/{taskId}`
+  - `DELETE /tasks/{taskId}`
