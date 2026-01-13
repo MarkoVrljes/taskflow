@@ -119,3 +119,23 @@ This file tracks changes made to the project, why they were made, and where they
   - `GET /tasks/{taskId}`
   - `PATCH /tasks/{taskId}`
   - `DELETE /tasks/{taskId}`
+
+## 2025-12-29 - Step 5: Comments (core)
+
+### Summary
+- Added comments table and endpoints for creating and listing task comments.
+
+### Added
+- Migration: `backend/src/main/resources/db/migration/V5__comments.sql`.
+- Comment model + API:
+  - `backend/src/main/java/com/dusan/taskflow/comment/Comment.java`
+  - `backend/src/main/java/com/dusan/taskflow/comment/CommentRepository.java`
+  - `backend/src/main/java/com/dusan/taskflow/comment/CommentService.java`
+  - `backend/src/main/java/com/dusan/taskflow/comment/CommentController.java`
+  - `backend/src/main/java/com/dusan/taskflow/comment/dto/CommentCreateRequest.java`
+  - `backend/src/main/java/com/dusan/taskflow/comment/dto/CommentResponse.java`
+
+### Notes
+- Endpoints:
+  - `POST /tasks/{taskId}/comments`
+  - `GET /tasks/{taskId}/comments`
