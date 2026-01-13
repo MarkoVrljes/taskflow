@@ -13,24 +13,25 @@ import com.dusan.taskflow.comment.dto.CommentCreateRequest;
 import com.dusan.taskflow.comment.dto.CommentResponse;
 import com.dusan.taskflow.task.Task;
 import com.dusan.taskflow.task.TaskRepository;
-import com.dusan.taskflow.workspace.WorkspaceMemberRepository;
+import com.dusan.taskflow.workspace.WorkspaceAccessService;
+import com.dusan.taskflow.workspace.WorkspaceRole;
 
 @Service
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
-    private final WorkspaceMemberRepository workspaceMemberRepository;
+    private final WorkspaceAccessService workspaceAccessService;
     private final CurrentUserService currentUserService;
 
     public CommentService(
             CommentRepository commentRepository,
             TaskRepository taskRepository,
-            WorkspaceMemberRepository workspaceMemberRepository,
+            WorkspaceAccessService workspaceAccessService,
             CurrentUserService currentUserService) {
         this.commentRepository = commentRepository;
         this.taskRepository = taskRepository;
-        this.workspaceMemberRepository = workspaceMemberRepository;
+        this.workspaceAccessService = workspaceAccessService;
         this.currentUserService = currentUserService;
     }
 
@@ -39,7 +40,12 @@ public class CommentService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
 
         UUID userId = currentUserService.requireUserId();
-        requireMember(task.getWorkspaceId(), userId);
+        workspaceAccessService.requireRoleIn(
+                task.getWorkspaceId(),
+                userId,
+                WorkspaceRole.OWNER,
+                WorkspaceRole.ADMIN,
+                WorkspaceRole.MEMBER);
 
         Comment comment = new Comment();
         comment.setTaskId(task.getId());
@@ -56,17 +62,11 @@ public class CommentService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
 
         UUID userId = currentUserService.requireUserId();
-        requireMember(task.getWorkspaceId(), userId);
+        workspaceAccessService.requireMember(task.getWorkspaceId(), userId);
 
         return commentRepository.findAllByTaskIdOrderByCreatedAtAsc(taskId).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
-    }
-
-    private void requireMember(UUID workspaceId, UUID userId) {
-        if (!workspaceMemberRepository.existsByIdWorkspaceIdAndIdUserId(workspaceId, userId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Workspace not found");
-        }
     }
 
     private CommentResponse toResponse(Comment comment) {

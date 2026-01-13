@@ -139,3 +139,34 @@ This file tracks changes made to the project, why they were made, and where they
 - Endpoints:
   - `POST /tasks/{taskId}/comments`
   - `GET /tasks/{taskId}/comments`
+
+## 2025-12-29 - Step 6: Invites + RBAC (core)
+
+### Summary
+- Added workspace invites (create + accept) with token flow.
+- Enforced role-based access rules for projects, tasks, and comments.
+
+### Added
+- Migration: `backend/src/main/resources/db/migration/V6__workspace_invites.sql`.
+- Invite model + API:
+  - `backend/src/main/java/com/dusan/taskflow/invite/WorkspaceInvite.java`
+  - `backend/src/main/java/com/dusan/taskflow/invite/WorkspaceInviteRepository.java`
+  - `backend/src/main/java/com/dusan/taskflow/invite/WorkspaceInviteService.java`
+  - `backend/src/main/java/com/dusan/taskflow/invite/WorkspaceInviteController.java`
+  - `backend/src/main/java/com/dusan/taskflow/invite/dto/InviteCreateRequest.java`
+  - `backend/src/main/java/com/dusan/taskflow/invite/dto/InviteResponse.java`
+  - `backend/src/main/java/com/dusan/taskflow/invite/dto/InviteAcceptResponse.java`
+- Access helper:
+  - `backend/src/main/java/com/dusan/taskflow/workspace/WorkspaceAccessService.java`
+
+### Updated
+- Role enforcement in:
+  - `backend/src/main/java/com/dusan/taskflow/project/ProjectService.java`
+  - `backend/src/main/java/com/dusan/taskflow/task/TaskService.java`
+  - `backend/src/main/java/com/dusan/taskflow/comment/CommentService.java`
+  - `backend/src/main/java/com/dusan/taskflow/workspace/WorkspaceMemberRepository.java`
+
+### Notes
+- Invite endpoints:
+  - `POST /workspaces/{workspaceId}/invites` (OWNER/ADMIN)
+  - `POST /invites/accept?token=...`

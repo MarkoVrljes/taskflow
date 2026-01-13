@@ -11,29 +11,28 @@ import org.springframework.web.server.ResponseStatusException;
 import com.dusan.taskflow.auth.CurrentUserService;
 import com.dusan.taskflow.project.dto.ProjectCreateRequest;
 import com.dusan.taskflow.project.dto.ProjectResponse;
-import com.dusan.taskflow.workspace.WorkspaceMemberRepository;
+import com.dusan.taskflow.workspace.WorkspaceAccessService;
+import com.dusan.taskflow.workspace.WorkspaceRole;
 
 @Service
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
-    private final WorkspaceMemberRepository workspaceMemberRepository;
+    private final WorkspaceAccessService workspaceAccessService;
     private final CurrentUserService currentUserService;
 
     public ProjectService(
             ProjectRepository projectRepository,
-            WorkspaceMemberRepository workspaceMemberRepository,
+            WorkspaceAccessService workspaceAccessService,
             CurrentUserService currentUserService) {
         this.projectRepository = projectRepository;
-        this.workspaceMemberRepository = workspaceMemberRepository;
+        this.workspaceAccessService = workspaceAccessService;
         this.currentUserService = currentUserService;
     }
 
     public ProjectResponse create(UUID workspaceId, ProjectCreateRequest request) {
         UUID userId = currentUserService.requireUserId();
-        if (!workspaceMemberRepository.existsByIdWorkspaceIdAndIdUserId(workspaceId, userId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Workspace not found");
-        }
+        workspaceAccessService.requireRoleIn(workspaceId, userId, WorkspaceRole.OWNER, WorkspaceRole.ADMIN);
 
         Project project = new Project();
         project.setWorkspaceId(workspaceId);
@@ -46,9 +45,7 @@ public class ProjectService {
 
     public List<ProjectResponse> list(UUID workspaceId) {
         UUID userId = currentUserService.requireUserId();
-        if (!workspaceMemberRepository.existsByIdWorkspaceIdAndIdUserId(workspaceId, userId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Workspace not found");
-        }
+        workspaceAccessService.requireMember(workspaceId, userId);
 
         return projectRepository.findAllByWorkspaceId(workspaceId).stream()
                 .map(this::toResponse)

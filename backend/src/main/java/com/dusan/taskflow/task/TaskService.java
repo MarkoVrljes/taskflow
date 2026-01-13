@@ -19,7 +19,8 @@ import com.dusan.taskflow.project.ProjectRepository;
 import com.dusan.taskflow.task.dto.TaskCreateRequest;
 import com.dusan.taskflow.task.dto.TaskResponse;
 import com.dusan.taskflow.task.dto.TaskUpdateRequest;
-import com.dusan.taskflow.workspace.WorkspaceMemberRepository;
+import com.dusan.taskflow.workspace.WorkspaceAccessService;
+import com.dusan.taskflow.workspace.WorkspaceRole;
 
 @Service
 public class TaskService {
@@ -30,17 +31,17 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
-    private final WorkspaceMemberRepository workspaceMemberRepository;
+    private final WorkspaceAccessService workspaceAccessService;
     private final CurrentUserService currentUserService;
 
     public TaskService(
             TaskRepository taskRepository,
             ProjectRepository projectRepository,
-            WorkspaceMemberRepository workspaceMemberRepository,
+            WorkspaceAccessService workspaceAccessService,
             CurrentUserService currentUserService) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
-        this.workspaceMemberRepository = workspaceMemberRepository;
+        this.workspaceAccessService = workspaceAccessService;
         this.currentUserService = currentUserService;
     }
 
@@ -49,7 +50,12 @@ public class TaskService {
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        requireMember(project.getWorkspaceId(), userId);
+        workspaceAccessService.requireRoleIn(
+                project.getWorkspaceId(),
+                userId,
+                WorkspaceRole.OWNER,
+                WorkspaceRole.ADMIN,
+                WorkspaceRole.MEMBER);
 
         Task task = new Task();
         task.setWorkspaceId(project.getWorkspaceId());
@@ -76,7 +82,7 @@ public class TaskService {
             int size,
             String sort) {
         UUID userId = currentUserService.requireUserId();
-        requireMember(workspaceId, userId);
+        workspaceAccessService.requireMember(workspaceId, userId);
 
         int safeSize = Math.min(Math.max(size, 1), MAX_PAGE_SIZE);
         PageRequest pageRequest = PageRequest.of(Math.max(page, 0), safeSize, parseSort(sort));
@@ -103,7 +109,7 @@ public class TaskService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
 
         UUID userId = currentUserService.requireUserId();
-        requireMember(task.getWorkspaceId(), userId);
+        workspaceAccessService.requireMember(task.getWorkspaceId(), userId);
 
         return toResponse(task);
     }
@@ -113,7 +119,15 @@ public class TaskService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
 
         UUID userId = currentUserService.requireUserId();
-        requireMember(task.getWorkspaceId(), userId);
+        WorkspaceRole role = workspaceAccessService.requireRole(task.getWorkspaceId(), userId);
+        if (role == WorkspaceRole.VIEWER) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden");
+        }
+        if (role == WorkspaceRole.MEMBER
+                && !userId.equals(task.getCreatedBy())
+                && (task.getAssigneeId() == null || !userId.equals(task.getAssigneeId()))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden");
+        }
 
         if (request.title() != null) {
             task.setTitle(request.title());
@@ -143,15 +157,9 @@ public class TaskService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
 
         UUID userId = currentUserService.requireUserId();
-        requireMember(task.getWorkspaceId(), userId);
+        workspaceAccessService.requireRoleIn(task.getWorkspaceId(), userId, WorkspaceRole.OWNER, WorkspaceRole.ADMIN);
 
         taskRepository.delete(task);
-    }
-
-    private void requireMember(UUID workspaceId, UUID userId) {
-        if (!workspaceMemberRepository.existsByIdWorkspaceIdAndIdUserId(workspaceId, userId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Workspace not found");
-        }
     }
 
     private Sort parseSort(String sort) {
