@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dusan.taskflow.auth.dto.AuthLoginRequest;
+import com.dusan.taskflow.auth.dto.AuthRefreshRequest;
 import com.dusan.taskflow.auth.dto.AuthRegisterRequest;
 import com.dusan.taskflow.auth.dto.AuthResponse;
 
@@ -31,5 +32,15 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody AuthLoginRequest request) {
         return authService.login(request);
+    }
+
+    @PostMapping("/refresh")
+    public AuthResponse refresh(@Valid @RequestBody AuthRefreshRequest request) {
+        return authService.refresh(request);
+    }
+
+    @PostMapping("/logout")
+    public void logout() {
+        authService.logout();
     }
 }

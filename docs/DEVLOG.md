@@ -170,3 +170,30 @@ This file tracks changes made to the project, why they were made, and where they
 - Invite endpoints:
   - `POST /workspaces/{workspaceId}/invites` (OWNER/ADMIN)
   - `POST /invites/accept?token=...`
+
+## 2025-12-29 - Step 7: Refresh tokens (core)
+
+### Summary
+- Added refresh tokens stored in DB (hashed) with rotation.
+- Added refresh and logout endpoints.
+
+### Added
+- Migration: `backend/src/main/resources/db/migration/V7__refresh_tokens.sql`.
+- Refresh token model + repo:
+  - `backend/src/main/java/com/dusan/taskflow/auth/RefreshToken.java`
+  - `backend/src/main/java/com/dusan/taskflow/auth/RefreshTokenRepository.java`
+- Refresh DTO:
+  - `backend/src/main/java/com/dusan/taskflow/auth/dto/AuthRefreshRequest.java`
+
+### Updated
+- Auth flow with refresh tokens:
+  - `backend/src/main/java/com/dusan/taskflow/auth/AuthService.java`
+  - `backend/src/main/java/com/dusan/taskflow/auth/AuthController.java`
+  - `backend/src/main/java/com/dusan/taskflow/auth/dto/AuthResponse.java`
+  - `backend/src/main/java/com/dusan/taskflow/config/SecurityConfig.java`
+  - `backend/src/main/resources/application.yml`
+
+### Notes
+- Endpoints:
+  - `POST /auth/refresh`
+  - `POST /auth/logout`
