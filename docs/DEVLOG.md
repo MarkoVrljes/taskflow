@@ -212,3 +212,21 @@ This file tracks changes made to the project, why they were made, and where they
 - Exception handling:
   - `backend/src/main/java/com/dusan/taskflow/config/ApiExceptionHandler.java`
 - Removed debug error stacktrace response in `backend/src/main/resources/application.yml`.
+
+## 2025-12-29 - Step 9: Swagger / OpenAPI
+
+### Summary
+- Added Springdoc OpenAPI UI for interactive API docs.
+
+### Added
+- Dependency: `springdoc-openapi-starter-webmvc-ui` in `backend/pom.xml`.
+- OpenAPI config:
+  - `backend/src/main/java/com/dusan/taskflow/config/OpenApiConfig.java`
+
+### Updated
+- Security allowlist for docs endpoints:
+  - `backend/src/main/java/com/dusan/taskflow/config/SecurityConfig.java`
+
+### Notes
+- Swagger UI available at `/swagger-ui.html` (or `/swagger-ui/index.html`).
+- Downgraded Spring Boot to 3.3.5 for Springdoc compatibility.
