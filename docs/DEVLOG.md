@@ -259,3 +259,21 @@ This file tracks changes made to the project, why they were made, and where they
   - `frontend/src/App.css`
   - `frontend/src/index.css`
   - `frontend/index.html`
+
+## 2025-12-29 - Step 12: Frontend routing
+
+### Summary
+- Added client-side routing with dedicated pages for login, workspaces, projects, and tasks.
+
+### Added/Updated
+- Routing and layout:
+  - `frontend/src/App.jsx`
+  - `frontend/src/components/AppLayout.jsx`
+  - `frontend/src/state/AuthContext.jsx`
+  - `frontend/src/main.jsx`
+- Pages:
+  - `frontend/src/pages/LoginPage.jsx`
+  - `frontend/src/pages/WorkspacesPage.jsx`
+  - `frontend/src/pages/WorkspacePage.jsx`
+  - `frontend/src/pages/ProjectPage.jsx`
+  - `frontend/src/pages/TaskPage.jsx`
