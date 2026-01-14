@@ -19,13 +19,18 @@ Local demo flow:
 3) Add tasks, filter, and comment
 4) Invite a member and verify role permissions
 
+Demo credentials (optional):
+- `demo@example.com` / `password123`
+
 ## Screenshots
 
-Add screenshots to `docs/screenshots/` and link them here.
+Add screenshots to `docs/screenshots/` and they will render below.
 
-- `docs/screenshots/login.png`
-- `docs/screenshots/workspace.png`
-- `docs/screenshots/task.png`
+![Login screen](docs/screenshots/login.png)
+![Workspaces list](docs/screenshots/workspaces.png)
+![Workspace dashboard](docs/screenshots/workspace.png)
+![Project view](docs/screenshots/project.png)
+![Task detail](docs/screenshots/task.png)
 
 ## Architecture
 
