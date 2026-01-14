@@ -246,3 +246,16 @@ This file tracks changes made to the project, why they were made, and where they
 ### Updated
 - Testcontainers dependencies in `backend/pom.xml`.
 - Integration tests skip when Docker is unavailable; removed default context test.
+
+## 2025-12-29 - Step 11: Frontend (React)
+
+### Summary
+- Added a minimal React UI for auth, workspaces, projects, tasks, and comments.
+
+### Added/Updated
+- Frontend scaffold in `frontend/` (Vite + React).
+- UI components and API wiring in:
+  - `frontend/src/App.jsx`
+  - `frontend/src/App.css`
+  - `frontend/src/index.css`
+  - `frontend/index.html`

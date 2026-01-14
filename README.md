@@ -17,6 +17,17 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
+3) Run the frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend: http://localhost:5173
+Swagger: http://localhost:8080/swagger-ui/index.html
+
 Health check:
 
 - http://localhost:8080/actuator/health
