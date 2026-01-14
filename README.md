@@ -31,10 +31,10 @@ Add screenshots to `docs/screenshots/` and link them here.
 
 ```mermaid
 flowchart LR
-  UI[React (Vite)] --> API[Spring Boot API]
+  UI[React Vite] --> API[Spring Boot]
   API --> DB[(PostgreSQL)]
   API --> Flyway[Flyway Migrations]
-  API --> Auth[JWT + Refresh Tokens]
+  API --> Auth[JWT Refresh Tokens]
 ```
 
 ## Tech Stack
