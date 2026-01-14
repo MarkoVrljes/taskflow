@@ -230,3 +230,19 @@ This file tracks changes made to the project, why they were made, and where they
 ### Notes
 - Swagger UI available at `/swagger-ui.html` (or `/swagger-ui/index.html`).
 - Downgraded Spring Boot to 3.3.5 for Springdoc compatibility.
+
+## 2025-12-29 - Step 10: Integration tests + CI
+
+### Summary
+- Added Testcontainers-backed integration tests for tenant isolation and RBAC.
+- Added GitHub Actions CI to run backend tests.
+
+### Added
+- Integration tests:
+  - `backend/src/test/java/com/dusan/taskflow/IntegrationTests.java`
+- CI workflow:
+  - `.github/workflows/ci.yml`
+
+### Updated
+- Testcontainers dependencies in `backend/pom.xml`.
+- Integration tests skip when Docker is unavailable; removed default context test.
