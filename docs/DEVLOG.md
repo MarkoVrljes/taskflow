@@ -197,3 +197,18 @@ This file tracks changes made to the project, why they were made, and where they
 - Endpoints:
   - `POST /auth/refresh`
   - `POST /auth/logout`
+
+## 2025-12-29 - Step 8: Error format + validation polish
+
+### Summary
+- Standardized error responses and validation error details.
+
+### Added
+- Error response models:
+  - `backend/src/main/java/com/dusan/taskflow/config/ErrorResponse.java`
+  - `backend/src/main/java/com/dusan/taskflow/config/ValidationErrorResponse.java`
+
+### Updated
+- Exception handling:
+  - `backend/src/main/java/com/dusan/taskflow/config/ApiExceptionHandler.java`
+- Removed debug error stacktrace response in `backend/src/main/resources/application.yml`.
