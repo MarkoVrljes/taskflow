@@ -277,3 +277,4 @@ This file tracks changes made to the project, why they were made, and where they
   - `frontend/src/pages/WorkspacePage.jsx`
   - `frontend/src/pages/ProjectPage.jsx`
   - `frontend/src/pages/TaskPage.jsx`
+

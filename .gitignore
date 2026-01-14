@@ -34,3 +34,5 @@ node_modules/
 
 # Misc
 Export Chat Options.pdf
+# Local error log
+docs/ERRLOG.md

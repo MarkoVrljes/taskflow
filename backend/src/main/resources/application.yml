@@ -27,3 +27,4 @@ app:
     expiration-minutes: 60
   refresh:
     expiration-days: 7
+
