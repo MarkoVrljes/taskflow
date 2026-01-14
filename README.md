@@ -21,9 +21,8 @@ Local demo flow:
 
 ## Screenshots
 
-Add screenshots to `docs/screenshots/` and they will render below.
-
 Login
+
 ![Login screen](docs/screenshots/login.png)
 
 Workspaces
