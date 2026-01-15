@@ -13,9 +13,8 @@ Team Task API (mini Asana) built for local-first demos. Includes multi-tenancy, 
 
 ## Screenshots
 
-Add screenshots to `docs/screenshots/` and they will render below.
-
 Login
+
 ![Login screen](docs/screenshots/login.png)
 
 Workspaces
