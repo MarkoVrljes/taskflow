@@ -11,14 +11,6 @@ Team Task API (mini Asana) built for local-first demos. Includes multi-tenancy, 
 - Flyway migrations + PostgreSQL
 - Swagger docs + integration tests + CI
 
-## Demo
-
-Local demo flow:
-1) Register or sign in
-2) Create a workspace and project
-3) Add tasks, filter, and comment
-4) Invite a member and verify role permissions
-
 ## Screenshots
 
 Add screenshots to `docs/screenshots/` and they will render below.
@@ -38,15 +30,13 @@ Project
 Task
 ![Task detail](docs/screenshots/task.png)
 
-## Architecture
+## Demo
 
-```mermaid
-flowchart LR
-  UI[React Vite] --> API[Spring Boot]
-  API --> DB[(PostgreSQL)]
-  API --> Flyway[Flyway Migrations]
-  API --> Auth[JWT Refresh Tokens]
-```
+Local demo flow:
+1) Register or sign in
+2) Create a workspace and project
+3) Add tasks, filter, and comment
+4) Invite a member and verify role permissions
 
 ## Tech Stack
 
@@ -56,6 +46,16 @@ flowchart LR
 - Docs: Swagger (Springdoc OpenAPI)
 - Tests: Testcontainers, JUnit
 - CI: GitHub Actions
+
+## Architecture
+
+```mermaid
+flowchart LR
+  UI[React Vite] --> API[Spring Boot]
+  API --> DB[(PostgreSQL)]
+  API --> Flyway[Flyway Migrations]
+  API --> Auth[JWT Refresh Tokens]
+```
 
 ## Local Setup
 
@@ -84,14 +84,6 @@ Frontend: http://localhost:5173
 Swagger: http://localhost:8080/swagger-ui/index.html  
 Health: http://localhost:8080/actuator/health
 
-## Environment
-
-Frontend API base (optional):
-
-```
-VITE_API_URL=http://localhost:8080
-```
-
 ## Testing
 
 Run integration tests (requires Docker running):
@@ -113,4 +105,12 @@ Key endpoints:
 - `POST /tasks/{id}/comments`
 - `POST /workspaces/{id}/invites`
 - `POST /invites/accept?token=...`
+
+## Environment
+
+Frontend API base (optional):
+
+```
+VITE_API_URL=http://localhost:8080
+```
 
