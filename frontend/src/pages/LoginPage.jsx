@@ -7,6 +7,7 @@ export default function LoginPage() {
   const [mode, setMode] = useState('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(true)
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
@@ -15,9 +16,9 @@ export default function LoginPage() {
     setError('')
     try {
       if (mode === 'login') {
-        await login(email, password)
+        await login(email, password, rememberMe)
       } else {
-        await register(email, password)
+        await register(email, password, rememberMe)
       }
       navigate('/workspaces')
     } catch (err) {
@@ -56,6 +57,16 @@ export default function LoginPage() {
             type="password"
             required
           />
+        </div>
+        <div className="form-row checkbox-row">
+          <label>
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(event) => setRememberMe(event.target.checked)}
+            />
+            Remember me
+          </label>
         </div>
         <div className="auth-actions">
           <button className="button" type="submit">

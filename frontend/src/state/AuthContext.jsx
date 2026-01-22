@@ -4,27 +4,58 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
 const AuthContext = createContext(null)
 
-export function AuthProvider({ children }) {
-  const [tokens, setTokensState] = useState(() => ({
+const readStoredTokens = () => {
+  const local = {
     accessToken: localStorage.getItem('accessToken') || '',
     refreshToken: localStorage.getItem('refreshToken') || '',
-  }))
+  }
+  if (local.accessToken || local.refreshToken) {
+    return { tokens: local, storage: 'local' }
+  }
+  const session = {
+    accessToken: sessionStorage.getItem('accessToken') || '',
+    refreshToken: sessionStorage.getItem('refreshToken') || '',
+  }
+  if (session.accessToken || session.refreshToken) {
+    return { tokens: session, storage: 'session' }
+  }
+  return { tokens: { accessToken: '', refreshToken: '' }, storage: null }
+}
+
+export function AuthProvider({ children }) {
+  const initial = readStoredTokens()
+  const [tokens, setTokensState] = useState(initial.tokens)
+  const [tokenStorage, setTokenStorage] = useState(initial.storage)
   const [error, setError] = useState('')
 
-  const setTokens = useCallback((data) => {
+  const persistTokens = useCallback((next, storage) => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    sessionStorage.removeItem('accessToken')
+    sessionStorage.removeItem('refreshToken')
+    const target = storage === 'session' ? sessionStorage : localStorage
+    target.setItem('accessToken', next.accessToken)
+    target.setItem('refreshToken', next.refreshToken)
+    setTokensState(next)
+    setTokenStorage(storage)
+  }, [])
+
+  const setTokens = useCallback((data, rememberMe = true) => {
     const next = {
       accessToken: data?.accessToken || '',
       refreshToken: data?.refreshToken || '',
     }
-    localStorage.setItem('accessToken', next.accessToken)
-    localStorage.setItem('refreshToken', next.refreshToken)
-    setTokensState(next)
-  }, [])
+    const storage = rememberMe ? 'local' : 'session'
+    persistTokens(next, storage)
+  }, [persistTokens])
 
   const clearTokens = useCallback(() => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    sessionStorage.removeItem('accessToken')
+    sessionStorage.removeItem('refreshToken')
     setTokensState({ accessToken: '', refreshToken: '' })
+    setTokenStorage(null)
   }, [])
 
   const refreshTokens = useCallback(async () => {
@@ -42,13 +73,15 @@ export function AuthProvider({ children }) {
         return false
       }
       const data = await response.json()
-      setTokens(data)
+      const storage =
+        tokenStorage || (localStorage.getItem('refreshToken') ? 'local' : 'session')
+      persistTokens(data, storage || 'local')
       return true
     } catch {
       clearTokens()
       return false
     }
-  }, [clearTokens, setTokens, tokens.refreshToken])
+  }, [clearTokens, persistTokens, tokenStorage, tokens.refreshToken])
 
   const apiRequest = useCallback(
     async (path, options = {}, allowRefresh = true) => {
@@ -88,26 +121,26 @@ export function AuthProvider({ children }) {
   )
 
   const login = useCallback(
-    async (email, password) => {
+    async (email, password, rememberMe = true) => {
       setError('')
       const data = await apiRequest('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       })
-      setTokens(data)
+      setTokens(data, rememberMe)
       return data
     },
     [apiRequest, setTokens],
   )
 
   const register = useCallback(
-    async (email, password) => {
+    async (email, password, rememberMe = true) => {
       setError('')
       const data = await apiRequest('/auth/register', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       })
-      setTokens(data)
+      setTokens(data, rememberMe)
       return data
     },
     [apiRequest, setTokens],
