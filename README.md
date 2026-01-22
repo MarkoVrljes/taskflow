@@ -2,6 +2,18 @@
 
 Team task manager (mini Asana) built for local-first demos. Shows multi-tenancy, RBAC, invites, JWT refresh, and a clean React UI.
 
+## Quickstart (Docker)
+
+Run everything (db + backend + frontend):
+
+```bash
+docker compose up --build
+```
+
+Frontend: http://localhost:5173  
+Swagger: http://localhost:8080/swagger-ui/index.html  
+Health: http://localhost:8080/actuator/health
+
 ## Highlights
 
 - Multi-tenant workspaces with role-based access control
@@ -39,18 +51,6 @@ flowchart LR
 ```
 
 ## Local Setup
-
-### Quickstart (Docker)
-
-Run everything (db + backend + frontend):
-
-```bash
-docker compose up --build
-```
-
-Frontend: http://localhost:5173  
-Swagger: http://localhost:8080/swagger-ui/index.html  
-Health: http://localhost:8080/actuator/health
 
 ### Manual dev
 
