@@ -1,6 +1,6 @@
 # Taskflow
 
-Team Task API (mini Asana) built for local-first demos. Includes multi-tenancy, RBAC, invites, comments, and a clean React UI.
+Team task manager (mini Asana) built for local-first demos. Shows multi-tenancy, RBAC, invites, JWT refresh, and a clean React UI.
 
 ## Highlights
 
@@ -11,25 +11,7 @@ Team Task API (mini Asana) built for local-first demos. Includes multi-tenancy, 
 - Flyway migrations + PostgreSQL
 - Swagger docs + integration tests + CI
 
-## Screenshots
-
-Login
-
-![Login screen](docs/screenshots/login.png)
-
-Workspaces
-![Workspaces list](docs/screenshots/workspaces.png)
-
-Workspace
-![Workspace dashboard](docs/screenshots/workspace.png)
-
-Project
-![Project view](docs/screenshots/project.png)
-
-Task
-![Task detail](docs/screenshots/task.png)
-
-## Demo
+## Demo flow
 
 Local demo flow:
 1) Register or sign in
@@ -127,3 +109,19 @@ Frontend API base (optional):
 VITE_API_URL=http://localhost:8080
 ```
 
+## Screenshots
+
+Login  
+![Login screen](docs/screenshots/login.png)
+
+Workspaces  
+![Workspaces list](docs/screenshots/workspaces.png)
+
+Workspace  
+![Workspace dashboard](docs/screenshots/workspace.png)
+
+Project  
+![Project view](docs/screenshots/project.png)
+
+Task  
+![Task detail](docs/screenshots/task.png)
