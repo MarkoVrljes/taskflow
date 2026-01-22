@@ -58,10 +58,24 @@ flowchart LR
 
 ## Local Setup
 
-1) Start Postgres:
+### Quickstart (Docker)
+
+Run everything (db + backend + frontend):
 
 ```bash
-docker compose up -d
+docker compose up --build
+```
+
+Frontend: http://localhost:5173  
+Swagger: http://localhost:8080/swagger-ui/index.html  
+Health: http://localhost:8080/actuator/health
+
+### Manual dev
+
+1) Start Postgres only:
+
+```bash
+docker compose up -d db
 ```
 
 2) Run the backend:
