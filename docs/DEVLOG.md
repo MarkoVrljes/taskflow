@@ -2,7 +2,7 @@
 
 This file tracks changes made to the project, why they were made, and where they live. It will grow as the project evolves.
 
-## 2025-12-29 - Step 1: Scaffold + local infra
+## Step 1: Scaffold + local infra
 
 ### Summary
 - Generated Spring Boot backend (Maven) with core dependencies.
@@ -21,7 +21,7 @@ This file tracks changes made to the project, why they were made, and where they
 - Health endpoint available at `/actuator/health`.
 - Flyway runs on startup and validates schema.
 
-## 2025-12-29 - Step 2: Users + auth skeleton (JWT)
+## Step 2: Users + auth skeleton (JWT)
 
 ### Summary
 - Added `users` table and basic auth endpoints (register/login).
@@ -53,7 +53,7 @@ This file tracks changes made to the project, why they were made, and where they
 - All other endpoints require `Authorization: Bearer <token>`.
 - JWT secret is a dev placeholder; replace before production.
 
-## 2025-12-29 - Step 3: Workspaces + membership (core)
+## Step 3: Workspaces + membership (core)
 
 ### Summary
 - Added workspace and membership tables plus basic CRUD endpoints.
@@ -82,7 +82,7 @@ This file tracks changes made to the project, why they were made, and where they
   - `GET /workspaces` lists current user's workspaces.
   - `GET /workspaces/{id}` returns a workspace only if the user is a member.
 
-## 2025-12-29 - Step 4: Projects + tasks (core)
+## Step 4: Projects + tasks (core)
 
 ### Summary
 - Added projects and tasks tables and CRUD endpoints.
@@ -120,7 +120,7 @@ This file tracks changes made to the project, why they were made, and where they
   - `PATCH /tasks/{taskId}`
   - `DELETE /tasks/{taskId}`
 
-## 2025-12-29 - Step 5: Comments (core)
+## Step 5: Comments (core)
 
 ### Summary
 - Added comments table and endpoints for creating and listing task comments.
@@ -140,7 +140,7 @@ This file tracks changes made to the project, why they were made, and where they
   - `POST /tasks/{taskId}/comments`
   - `GET /tasks/{taskId}/comments`
 
-## 2025-12-29 - Step 6: Invites + RBAC (core)
+## Step 6: Invites + RBAC (core)
 
 ### Summary
 - Added workspace invites (create + accept) with token flow.
@@ -171,7 +171,7 @@ This file tracks changes made to the project, why they were made, and where they
   - `POST /workspaces/{workspaceId}/invites` (OWNER/ADMIN)
   - `POST /invites/accept?token=...`
 
-## 2025-12-29 - Step 7: Refresh tokens (core)
+## Step 7: Refresh tokens (core)
 
 ### Summary
 - Added refresh tokens stored in DB (hashed) with rotation.
@@ -198,7 +198,7 @@ This file tracks changes made to the project, why they were made, and where they
   - `POST /auth/refresh`
   - `POST /auth/logout`
 
-## 2025-12-29 - Step 8: Error format + validation polish
+## Step 8: Error format + validation polish
 
 ### Summary
 - Standardized error responses and validation error details.
@@ -213,7 +213,7 @@ This file tracks changes made to the project, why they were made, and where they
   - `backend/src/main/java/com/dusan/taskflow/config/ApiExceptionHandler.java`
 - Removed debug error stacktrace response in `backend/src/main/resources/application.yml`.
 
-## 2025-12-29 - Step 9: Swagger / OpenAPI
+## Step 9: Swagger / OpenAPI
 
 ### Summary
 - Added Springdoc OpenAPI UI for interactive API docs.
@@ -231,7 +231,7 @@ This file tracks changes made to the project, why they were made, and where they
 - Swagger UI available at `/swagger-ui.html` (or `/swagger-ui/index.html`).
 - Downgraded Spring Boot to 3.3.5 for Springdoc compatibility.
 
-## 2025-12-29 - Step 10: Integration tests + CI
+## Step 10: Integration tests + CI
 
 ### Summary
 - Added Testcontainers-backed integration tests for tenant isolation and RBAC.
@@ -247,7 +247,7 @@ This file tracks changes made to the project, why they were made, and where they
 - Testcontainers dependencies in `backend/pom.xml`.
 - Integration tests skip when Docker is unavailable; removed default context test.
 
-## 2025-12-29 - Step 11: Frontend (React)
+## Step 11: Frontend (React)
 
 ### Summary
 - Added a minimal React UI for auth, workspaces, projects, tasks, and comments.
@@ -260,7 +260,7 @@ This file tracks changes made to the project, why they were made, and where they
   - `frontend/src/index.css`
   - `frontend/index.html`
 
-## 2025-12-29 - Step 12: Frontend routing
+## Step 12: Frontend routing
 
 ### Summary
 - Added client-side routing with dedicated pages for login, workspaces, projects, and tasks.
@@ -275,6 +275,27 @@ This file tracks changes made to the project, why they were made, and where they
   - `frontend/src/pages/LoginPage.jsx`
   - `frontend/src/pages/WorkspacesPage.jsx`
   - `frontend/src/pages/WorkspacePage.jsx`
-  - `frontend/src/pages/ProjectPage.jsx`
-  - `frontend/src/pages/TaskPage.jsx`
+- `frontend/src/pages/ProjectPage.jsx`
+- `frontend/src/pages/TaskPage.jsx`
 
+## Step 13: One-command Docker stack
+
+### Summary
+- Added Dockerfiles and compose wiring to run DB, backend, and frontend with one command.
+
+### Added/Updated
+- Compose updates in `docker-compose.yml`.
+- Backend container build in `backend/Dockerfile`.
+- Frontend build + nginx static hosting in `frontend/Dockerfile`.
+- Nginx SPA config in `frontend/nginx.conf`.
+- Quickstart docs in `README.md`.
+
+## Step 14: Remember me session option
+
+### Summary
+- Added a "Remember me" toggle to control token persistence.
+
+### Added/Updated
+- Auth storage logic in `frontend/src/state/AuthContext.jsx`.
+- Login UI toggle in `frontend/src/pages/LoginPage.jsx`.
+- Checkbox layout styles in `frontend/src/App.css`.
