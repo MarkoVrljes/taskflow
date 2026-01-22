@@ -23,7 +23,7 @@ management:
 
 app:
   jwt:
-    secret: dev-secret-change-this-32-bytes-minimum
+    secret: ${APP_JWT_SECRET:dev-secret-change-this-32-bytes-minimum}
     expiration-minutes: 60
   refresh:
     expiration-days: 7

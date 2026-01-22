@@ -109,6 +109,12 @@ Frontend API base (optional):
 VITE_API_URL=http://localhost:8080
 ```
 
+Backend JWT secret (dev only; set a real value for production):
+
+```
+APP_JWT_SECRET=change-this-32-bytes-minimum
+```
+
 ## Screenshots
 
 Login  
